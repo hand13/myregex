@@ -15,8 +15,31 @@ public class Regex {
         this.regex = regex;
         lexer = new Lexer(regex);
     }
-    public boolean match(String target) {
+    public boolean match(String target)throws Exception {
         Reader stringReader = new BufferedReader(new StringReader(target));
+        Token token = lexer.getNextToken();
+        while (token != null) {
+            switch (token.tokenType) {
+                case ANY:
+                    break;
+                case STRING:
+                    String value = token.value;
+                    for(char c : value.toCharArray()) {
+                        int i = stringReader.read();
+                        if(i < 0) {
+                            return false;
+                        }
+                        char s = (char)i;
+                        if(s != c){
+                            return false;
+                        }
+                    }
+                    break;
+                case ONEOZ:
+
+            }
+            token = lexer.getNextToken();
+        }
         return false;
     }
 }
